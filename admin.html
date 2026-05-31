@@ -11,11 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p0i3DgY5t5HIod0xw6xKUrkUUOfYbGg6jEFE3+v1P49Ny4cxNtnm1+VZtKfqwY8h5gQe3D+vfR9zdUS6E4rHgA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <script>
-        if (window.location.hostname !== 'localhost' || window.location.port !== '3000') {
-            window.location.href = 'http://localhost:3000' + window.location.pathname;
-        }
-    </script>
     <div class="container">
         <header class="header">
             <div class="logo-area">
@@ -38,8 +33,8 @@
             <div class="nav-brand">Admin</div>
             <ul class="nav-links">
                 <li><a href="Index.html">Landing</a></li>
-                <li><a href="http://localhost:3000/signin.html">Sign In</a></li>
-                <li><a href="http://localhost:3000/signup.html">Sign Up</a></li>
+                <li><a href="/signin.html">Sign In</a></li>
+                <li><a href="/signup.html">Sign Up</a></li>
                 <li><a id="logout-link" href="#">Logout</a></li>
             </ul>
         </nav>
@@ -132,7 +127,7 @@
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:3000';
+        const API_BASE = '';
         const statusEl = document.querySelector('.login-status');
         const uploadForm = document.getElementById('upload-form');
         const uploadMsg = document.getElementById('upload-msg');
@@ -601,7 +596,7 @@
         logoutLink.addEventListener('click', async (event) => {
             event.preventDefault();
             await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
-            window.location.href = 'http://localhost:3000/signin.html';
+            window.location.href = '/signin.html';
         });
 
         loadUploads();

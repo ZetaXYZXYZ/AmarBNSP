@@ -7,11 +7,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <script>
-    if (window.location.hostname !== 'localhost' || window.location.port !== '3000') {
-      window.location.href = 'http://localhost:3000' + window.location.pathname;
-    }
-  </script>
   <main>
     <h1>Login (Sign In)</h1>
     <form id="signin-form">
@@ -20,7 +15,7 @@
       <button type="submit">Masuk</button>
     </form>
     <div id="msg"></div>
-    <p>Belum punya akun? <a href="http://localhost:3000/signup.html">Daftar</a></p>
+    <p>Belum punya akun? <a href="/signup.html">Daftar</a></p>
   </main>
 
   <script>
@@ -30,19 +25,19 @@
       e.preventDefault();
       const data = Object.fromEntries(new FormData(form).entries());
       try {
-        const res = await fetch('http://localhost:3000/api/signin', {
+        const res = await fetch('/api/signin', {
           method: 'POST', headers: {'Content-Type':'application/json'},
           body: JSON.stringify(data)
         });
         if (res.ok) {
           msg.textContent = 'Login sukses.';
-          setTimeout(() => { window.location.href = 'http://localhost:3000/Index.html'; }, 700);
+          setTimeout(() => { window.location.href = '/Index.html'; }, 700);
         } else {
           const text = await res.text();
           msg.textContent = text;
         }
       } catch (err) {
-        msg.textContent = 'Tidak dapat terkoneksi ke server. Pastikan server dijalankan dan buka halaman lewat http://localhost:3000/signin.html';
+        msg.textContent = 'Tidak dapat terkoneksi ke server. Pastikan Anda mengakses halaman dari domain yang benar.';
         console.error(err);
       }
     });
