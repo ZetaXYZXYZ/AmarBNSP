@@ -162,7 +162,11 @@ app.get('/admin.html', authenticateToken, requireAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-app.use(express.static(path.join(__dirname)));
+app.get(['/', '/Index.html', '/index.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'Index.html'));
+});
+
+app.use(express.static(path.join(__dirname), { index: 'Index.html' }));
 
 const JWT_SECRET = process.env.JWT_SECRET || 'change_this_in_production';
 
