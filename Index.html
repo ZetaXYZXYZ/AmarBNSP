@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Perusahaan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img"></i>
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Cipta Digital</span>
+                    <span class="brand-tag">Solusi digital modern</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">PT Cipta Digital Nusantara</p>
+                    <h1>Build Better Technology</h1>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <div class="nav-brand">Home</div>
+            <ul class="nav-links">
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Produk / Jasa</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="clients.html">Klien</a></li>
+                <li><a href="articles.html">Artikel</a></li>
+                <li><a href="events.html">Event</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+                    <li><a href="cart.html">Keranjang</a></li>
+                <!-- Admin link removed: admin dashboard is access-controlled -->
+            </ul>
+        </nav>
+
+        <div class="main-layout">
+            <aside class="sidebar">
+                <div class="section">
+                    <h3>Artikel</h3>
+                    <ul class="article-list">
+                        <li><a href="articles.html">Strategi Digital 2026</a></li>
+                        <li><a href="articles.html">Teknologi untuk Bisnis</a></li>
+                        <li><a href="articles.html">Peluang e-commerce</a></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h3>Event</h3>
+                    <ul class="event-list">
+                        <li><a href="events.html">Peluncuran produk terbaru</a></li>
+                        <li><a href="events.html">Workshop klien korporat</a></li>
+                        <li><a href="events.html">Open house inovasi</a></li>
+                    </ul>
+                </div>
+                <div class="login-card">
+                    <p class="login-title">Akun</p>
+                    <p class="login-status">Silakan masuk untuk menggunakan akun.</p>
+                    <div class="auth-links">
+                        <a id="signin-link" class="btn btn-primary" href="http://localhost:3000/signin.html">Sign In</a>
+                        <a id="signup-link" class="btn btn-secondary" href="http://localhost:3000/signup.html">Sign Up</a>
+                        <button id="logout-btn" type="button" class="logout-btn" style="display:none">Sign Out</button>
+                    </div>
+                    
+                </div>
+            </aside>
+            <main class="content-area">
+                <section class="hero-card">
+                    <p class="hero-subtitle">Cover Depan</p>
+                    <h2>PT Cipta Digital Nusantara</h2>
+                    <p>Perusahaan teknologi yang mengubah ide menjadi produk digital profesional untuk usaha modern.</p>
+                    <div class="hero-actions">
+                        <a href="about.html" class="btn btn-primary">Tentang Kami</a>
+                        <a href="products.html" class="btn btn-secondary">Produk & Jasa</a>
+                    </div>
+                </section>
+                <section class="home-grid">
+                    <a class="card-link" href="about.html">
+                        <h3>About Us</h3>
+                        <p>Sejarah, visi misi, profil, dan keunggulan perusahaan.</p>
+                    </a>
+                    <a class="card-link" href="products.html">
+                        <h3>Produk / Jasa</h3>
+                        <p>Layanan digital kami mencakup website, aplikasi, sistem, dan konsultasi.</p>
+                    </a>
+                    <a class="card-link" href="gallery.html">
+                        <h3>Gallery Foto</h3>
+                        <p>Dokumentasi kegiatan, proyek, dan acara perusahaan.</p>
+                    </a>
+                    <a class="card-link" href="clients.html">
+                        <h3>Daftar Klien</h3>
+                        <p>Daftar klien untuk menunjukkan reputasi dan pengalaman.</p>
+                    </a>
+                    <a class="card-link" href="articles.html">
+                        <h3>Artikel</h3>
+                        <p>Blog dan artikel yang menjelaskan solusi digital kami.</p>
+                    </a>
+                    <a class="card-link" href="events.html">
+                        <h3>Event</h3>
+                        <p>Kegiatan perusahaan, workshop, dan acara penting lainnya.</p>
+                    </a>
+                    <a class="card-link" href="contact.html">
+                        <h3>Kontak</h3>
+                        <p>Hubungi kami untuk diskusi proyek dan informasi layanan.</p>
+                    </a>
+                </section>
+            </main>
+            <footer class="footer">
+                <p class="footer-note">Design by "M Amar Fahmirza"</p>
+            </footer>
+        </div>
+        <script>
+            const API_BASE = 'http://localhost:3000';
+            const signinLink = document.getElementById('signin-link');
+            const signupLink = document.getElementById('signup-link');
+            const logoutBtn = document.getElementById('logout-btn');
+            const loginStatus = document.querySelector('.login-status');
+            const navLinks = document.querySelector('.nav-links');
+
+            async function refreshAuthUI() {
+                try {
+                    const res = await fetch(`${API_BASE}/api/me`);
+                    if (!res.ok) {
+                        // not logged in
+                        loginStatus.textContent = 'Silakan masuk untuk menggunakan akun.';
+                        signinLink.style.display = '';
+                        signupLink.style.display = '';
+                        logoutBtn.style.display = 'none';
+                        // remove admin link if present
+                        const existing = document.getElementById('nav-admin-link');
+                        if (existing) existing.remove();
+                        return;
+                    }
+                    const user = await res.json();
+                    loginStatus.textContent = `Masuk sebagai ${user.name || user.email}`;
+                    signinLink.style.display = 'none';
+                    signupLink.style.display = 'none';
+                    logoutBtn.style.display = '';
+                    if (user.is_admin) {
+                        if (!document.getElementById('nav-admin-link')) {
+                            const li = document.createElement('li');
+                            li.id = 'nav-admin-link';
+                            li.innerHTML = `<a id="nav-admin-anchor" href="/admin.html">Admin</a>`;
+                            navLinks.appendChild(li);
+                            // ensure click redirects directly to admin dashboard
+                            document.getElementById('nav-admin-anchor').addEventListener('click', (e) => {
+                                e.preventDefault();
+                                window.location.href = '/admin.html';
+                            });
+                        }
+                    } else {
+                        const existing = document.getElementById('nav-admin-link');
+                        if (existing) existing.remove();
+                    }
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            logoutBtn.addEventListener('click', async () => {
+                try {
+                    await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
+                } catch (e) {}
+                refreshAuthUI();
+            });
+
+            // initial
+            refreshAuthUI();
+        </script>
+    <script>
+        (async function () {
+            const restricted = ['/gallery.html', '/clients.html', '/articles.html', '/events.html', '/contact.html', '/admin.html', '/cart.html'];
+            const nav = document.querySelector('.nav-links');
+            if (!nav) return;
+            try {
+                const res = await fetch('/api/me');
+                if (!res.ok) throw new Error('not logged in');
+            } catch (err) {
+                nav.querySelectorAll('li a').forEach(link => {
+                    const href = link.getAttribute('href') || '';
+                    let path = href.startsWith('http') ? new URL(href).pathname.toLowerCase() : href.toLowerCase();
+                    if (!path.startsWith('/')) path = '/' + path;
+                    if (restricted.includes(path)) {
+                        const li = link.closest('li');
+                        if (li) li.style.display = 'none';
+                    }
+                });
+            }
+        })();
+    </script>
+    </div>
+</body>
+</html>

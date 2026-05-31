@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign In</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <script>
+    if (window.location.hostname !== 'localhost' || window.location.port !== '3000') {
+      window.location.href = 'http://localhost:3000' + window.location.pathname;
+    }
+  </script>
+  <main>
+    <h1>Login (Sign In)</h1>
+    <form id="signin-form">
+      <label>Email<br><input type="email" name="email" required></label><br>
+      <label>Password<br><input type="password" name="password" required></label><br>
+      <button type="submit">Masuk</button>
+    </form>
+    <div id="msg"></div>
+    <p>Belum punya akun? <a href="http://localhost:3000/signup.html">Daftar</a></p>
+  </main>
+
+  <script>
+    const form = document.getElementById('signin-form');
+    const msg = document.getElementById('msg');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(form).entries());
+      try {
+        const res = await fetch('http://localhost:3000/api/signin', {
+          method: 'POST', headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        if (res.ok) {
+          msg.textContent = 'Login sukses.';
+          setTimeout(() => { window.location.href = 'http://localhost:3000/Index.html'; }, 700);
+        } else {
+          const text = await res.text();
+          msg.textContent = text;
+        }
+      } catch (err) {
+        msg.textContent = 'Tidak dapat terkoneksi ke server. Pastikan server dijalankan dan buka halaman lewat http://localhost:3000/signin.html';
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Keranjang</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    if (window.location.hostname !== 'localhost' || window.location.port !== '3000') {
+      window.location.href = 'http://localhost:3000' + window.location.pathname;
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="logo-area">
+        <div class="logo-placeholder"><img src="img.png" alt="logo" class="logo-img"></div>
+        <div class="logo-text"><span class="brand-name">Cipta Digital</span><span class="brand-tag">Keranjang</span></div>
+      </div>
+    </header>
+    <nav class="navbar"><div class="nav-brand">Home</div><ul class="nav-links"><li><a href="index.html">Beranda</a></li><li><a href="products.html">Produk</a></li></ul></nav>
+    <main style="padding:20px;">
+      <h1>Keranjang Anda</h1>
+      <div id="cart-list"></div>
+      <div id="cart-msg" style="margin-top:12px;color:#475569"></div>
+      <div style="margin-top:16px;"><button id="checkout-btn" class="btn btn-primary">Checkout</button></div>
+    </main>
+  </div>
+  <script>
+    const API_BASE = 'http://localhost:3000';
+    const listEl = document.getElementById('cart-list');
+    const msgEl = document.getElementById('cart-msg');
+    async function loadCart() {
+      try {
+        const res = await fetch(`${API_BASE}/api/cart`, { credentials: 'include' });
+        if (!res.ok) {
+          if (res.status === 401) { window.location.href = '/signin.html'; return; }
+          throw new Error('Gagal memuat keranjang');
+        }
+        const items = await res.json();
+        if (!items.length) { listEl.innerHTML = '<p>Keranjang kosong.</p>'; return; }
+        listEl.innerHTML = items.map(it => `
+          <div class="article-card" style="display:flex;gap:12px;align-items:center;">
+            <div style="flex:1;">
+              <h3>${it.title}</h3>
+              <p>${it.description}</p>
+            </div>
+            <div style="flex:0 0 160px; text-align:right;">
+              <input type="number" min="0" value="${it.quantity}" id="qty-${it.product_id}" style="width:72px;padding:6px;border-radius:8px;border:1px solid #ccc;"> 
+              <div style="margin-top:8px;">
+                <button class="btn btn-secondary" onclick="updateQty(${it.product_id})">Update</button>
+                <button class="btn btn-danger" onclick="removeItem(${it.product_id})">Hapus</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) { listEl.innerHTML = '<p>Error memuat keranjang.</p>'; console.error(err); }
+    }
+    async function updateQty(pid) {
+      const v = Number(document.getElementById(`qty-${pid}`).value || 0);
+      const res = await fetch(`${API_BASE}/api/cart/${pid}`, { method: 'PATCH', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ quantity: v }), credentials: 'include' });
+      if (!res.ok) { msgEl.textContent = await res.text(); return; }
+      await loadCart();
+    }
+    async function removeItem(pid) {
+      const res = await fetch(`${API_BASE}/api/cart/${pid}`, { method: 'DELETE', credentials: 'include' });
+      if (!res.ok) { msgEl.textContent = await res.text(); return; }
+      await loadCart();
+    }
+    document.getElementById('checkout-btn').addEventListener('click', async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/cart/checkout`, { method: 'POST', credentials: 'include' });
+        if (!res.ok) { msgEl.textContent = await res.text(); return; }
+        const data = await res.json();
+        msgEl.textContent = `Order dibuat (ID: ${data.order_id}).`;
+        await loadCart();
+      } catch (err) { msgEl.textContent = 'Gagal melakukan checkout.'; console.error(err); }
+    });
+    loadCart();
+  </script>
+</body>
+</html>

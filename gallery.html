@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Foto - PT. Inspirasi Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <script>
+        if (window.location.hostname !== 'localhost' || window.location.port !== '3000') {
+            window.location.href = 'http://localhost:3000' + window.location.pathname;
+        }
+    </script>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Logo</span>
+                    <span class="brand-tag">Solusi digital modern</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">Gallery Foto</p>
+                    <h1>Dokumentasi Kegiatan Perusahaan</h1>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <div class="nav-brand">Home</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Produk / Jasa</a></li>
+                <li><a href="gallery.html" class="active">Gallery</a></li>
+                <li><a href="clients.html">Klien</a></li>
+                <li><a href="articles.html">Artikel</a></li>
+                <li><a href="events.html">Event</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-layout">
+            <main class="content-area">
+                <section class="page-heading">
+                    <p class="hero-subtitle">Gallery</p>
+                    <h2>Foto Kegiatan & Project Kami</h2>
+                    <p class="page-description">Lihat rangkaian foto kegiatan perusahaan, acara klien, workshop, dan proses kerja tim PT. Inspirasi Digital.</p>
+                </section>
+                <section class="gallery-section">
+                    <div class="gallery-grid" id="gallery-grid"></div>
+                </section>
+            </main>
+            <footer class="footer">
+            </footer>
+        </div>
+    </div>
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        async function loadGalleryPage() {
+            const grid = document.getElementById('gallery-grid');
+            try {
+                const res = await fetch(`${API_BASE}/api/gallery`);
+                if (!res.ok) throw new Error('Gagal memuat gallery');
+                const items = await res.json();
+                if (!items.length) {
+                    grid.innerHTML = '<div class="gallery-card">Belum ada foto gallery.</div>';
+                    return;
+                }
+                grid.innerHTML = items.map(item => `
+                    <div class="gallery-card">
+                        <img src="${API_BASE}/uploads/${item.filename}" alt="${item.title}" style="width:100%; height:260px; object-fit:cover; border-radius:18px; margin-bottom:14px;">
+                        <h3 style="margin-top:0;">${item.title}</h3>
+                    </div>
+                `).join('');
+            } catch (err) {
+                grid.innerHTML = '<div class="gallery-card">Tidak dapat memuat gallery. Pastikan server berjalan dengan http://localhost:3000.</div>';
+                console.error(err);
+            }
+        }
+        loadGalleryPage();
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - PT. Inspirasi Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Logo</span>
+                    <span class="brand-tag">Solusi digital modern</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">About Us</p>
+                    <h1>Tentang PT Cipta Digital Nusantara</h1>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <div class="nav-brand">Home</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="about.html" class="active">About Us</a></li>
+                <li><a href="products.html">Produk / Jasa</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="clients.html">Klien</a></li>
+                <li><a href="articles.html">Artikel</a></li>
+                <li><a href="events.html">Event</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+                    <li><a href="cart.html">Keranjang</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-layout">
+            <main class="content-area">
+                <section class="page-heading">
+                    <p class="hero-subtitle">Sejarah & Visi</p>
+                    <h2>Perusahaan Teknologi Dengan Akar yang Kuat</h2>
+                    <p class="page-description">PT. Inspirasi Digital berdiri sejak 2018 sebagai perusahaan pengembangan web kecil di Jakarta. Kami berkembang menjadi tim yang menyediakan solusi digital lengkap untuk bisnis modern.</p>
+                </section>
+                <section class="section-block">
+                    <h2>Tentang Kami</h2>
+                    <p>Perusahaan kami fokus pada pembangunan website, aplikasi mobile, dan layanan teknologi yang mendukung transformasi digital. Pendekatan kami adalah mitra yang dapat diandalkan, sehingga semua proyek dilakukan dengan langkah terukur dan berorientasi hasil.</p>
+                    <p>Kami melayani startup, UKM, dan korporat dengan layanan yang disesuaikan sesuai kebutuhan usaha. Dari konsep hingga implementasi, kami memadukan desain, engineering, dan strategi agar setiap solusi cocok dengan tujuan bisnis klien.</p>
+                </section>
+                <section class="section-grid">
+                    <article class="feature-card">
+                        <h3>Visi</h3>
+                        <p>Menjadi mitra digital terpercaya yang membantu perusahaan Indonesia tumbuh dengan solusi teknologi modern dan berkelanjutan.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Misi</h3>
+                        <p>Menyediakan layanan teknologi berkualitas, membangun pengalaman pengguna unggul, serta mendukung pertumbuhan bisnis melalui inovasi digital.</p>
+                    </article>
+                </section>
+                <section class="section-grid">
+                    <article class="feature-card">
+                        <h3>Profil Perusahaan</h3>
+                        <p>Kami merupakan perusahaan digital yang berfokus pada desain, pengembangan, dan konsultasi. Konsistensi dan transparansi adalah nilai utama dalam kerja kami.</p>
+                    </article>
+                    <article class="feature-card">
+                        <h3>Pengalaman</h3>
+                        <p>Lebih dari 120 proyek sukses, tim profesional 15+ orang, dan pengalaman lintas industri membentuk keunggulan operasional kami.</p>
+                    </article>
+                </section>
+                <section class="section-block">
+                    <h2>Kelebihan Kami</h2>
+                    <ul class="article-list">
+                        <li>Pendekatan solusi sesuai kebutuhan bisnis</li>
+                        <li>Desain user-friendly dan responsif</li>
+                        <li>Dukungan layanan purna jual yang aktif</li>
+                    </ul>
+                </section>
+            </main>
+            <footer class="footer">
+            </footer>
+        </div>
+    </div>
+    <script>
+        (async function () {
+            const restricted = ['/gallery.html', '/clients.html', '/articles.html', '/events.html', '/contact.html', '/admin.html', '/cart.html'];
+            const nav = document.querySelector('.nav-links');
+            if (!nav) return;
+            try {
+                const res = await fetch('/api/me');
+                if (!res.ok) throw new Error('not logged in');
+            } catch (err) {
+                nav.querySelectorAll('li a').forEach(link => {
+                    const href = link.getAttribute('href') || '';
+                    let path = href.startsWith('http') ? new URL(href).pathname.toLowerCase() : href.toLowerCase();
+                    if (!path.startsWith('/')) path = '/' + path;
+                    if (restricted.includes(path)) {
+                        const li = link.closest('li');
+                        if (li) li.style.display = 'none';
+                    }
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

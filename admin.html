@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p0i3DgY5t5HIod0xw6xKUrkUUOfYbGg6jEFE3+v1P49Ny4cxNtnm1+VZtKfqwY8h5gQe3D+vfR9zdUS6E4rHgA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <script>
+        if (window.location.hostname !== 'localhost' || window.location.port !== '3000') {
+            window.location.href = 'http://localhost:3000' + window.location.pathname;
+        }
+    </script>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Admin</span>
+                    <span class="brand-tag">Manajemen konten</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">Panel Admin</p>
+                    <h1>Unggah informasi dan kelola tautan file</h1>
+                </div>
+            </div>
+        </header>
+        <nav class="navbar">
+            <div class="nav-brand">Admin</div>
+            <ul class="nav-links">
+                <li><a href="Index.html">Landing</a></li>
+                <li><a href="http://localhost:3000/signin.html">Sign In</a></li>
+                <li><a href="http://localhost:3000/signup.html">Sign Up</a></li>
+                <li><a id="logout-link" href="#">Logout</a></li>
+            </ul>
+        </nav>
+        <div class="main-layout">
+            <aside class="sidebar">
+                <div class="section">
+                    <h3>Petunjuk</h3>
+                    <p class="no-bullet">Gunakan halaman ini untuk mengupload file dan menambahkan link ke informasi yang ingin ditampilkan kepada pengguna.</p>
+                </div>
+                <div class="section">
+                    <h3>Status</h3>
+                    <p class="login-status">Memeriksa akses admin...</p>
+                </div>
+            </aside>
+            <main class="content-area">
+                <section class="section-block">
+                    <div class="page-heading">
+                        <h2>Upload File Informasi</h2>
+                        <p class="page-description">Masukkan judul dan link file, lalu pilih file untuk diunggah ke server.</p>
+                    </div>
+                    <form id="upload-form" class="login-form">
+                        <input type="text" name="title" placeholder="Judul informasi" required>
+                        <input type="url" name="link" placeholder="Link tujuan (opsional)">
+                        <input type="file" name="file" accept="*/*">
+                        <button type="submit" class="btn btn-primary">Unggah</button>
+                    </form>
+                    <div id="upload-msg" style="margin-top: 12px; color: #475569;"></div>
+                </section>
+                <section class="section-block">
+                    <div class="page-heading">
+                        <h2>Upload Foto Gallery</h2>
+                        <p class="page-description">Unggah foto untuk halaman Gallery, lalu tambahkan judul yang akan tampil di bawah foto.</p>
+                    </div>
+                    <form id="gallery-form" class="login-form">
+                        <input type="text" name="title" placeholder="Judul foto gallery" required>
+                        <input type="file" name="files" accept="image/*" multiple required>
+                        <button type="submit" class="btn btn-primary">Unggah Foto</button>
+                    </form>
+                    <div id="gallery-msg" style="margin-top: 12px; color: #475569;"></div>
+                </section>
+                <section class="section-block">
+                    <div class="page-heading">
+                        <h2>Kelola Klien</h2>
+                        <p class="page-description">Tambah atau ubah nama klien langsung dari dashboard ini.</p>
+                    </div>
+                    <form id="client-form" class="login-form">
+                        <input type="text" name="name" placeholder="Nama klien baru" required>
+                        <button type="submit" class="btn btn-primary">Tambah Klien</button>
+                    </form>
+                    <div id="client-msg" style="margin-top: 12px; color: #475569;"></div>
+                    <div id="client-list"></div>
+                </section>
+                <section class="section-block">
+                    <div class="page-heading">
+                        <h2>Kelola Produk</h2>
+                        <p class="page-description">Tambah, ubah, atau hapus produk yang ditampilkan di halaman Produk.</p>
+                    </div>
+                    <form id="product-form" class="login-form">
+                        <input type="text" name="title" placeholder="Judul produk" required>
+                        <textarea name="description" placeholder="Deskripsi produk" rows="3" required></textarea>
+                        <input type="url" name="link" placeholder="Link produk (opsional)">
+                        <button type="submit" class="btn btn-primary">Simpan Produk</button>
+                    </form>
+                    <div id="product-msg" style="margin-top: 12px; color: #475569;"></div>
+                    <div id="product-list"></div>
+                </section>
+                <section class="section-block">
+                    <div class="page-heading">
+                        <h2>Kelola Artikel</h2>
+                        <p class="page-description">Tambah, ubah, atau hapus artikel yang tampil di halaman Artikel.</p>
+                    </div>
+                    <form id="article-form" class="login-form">
+                        <input type="text" name="title" placeholder="Judul artikel" required>
+                        <textarea name="description" placeholder="Ringkasan artikel" rows="3" required></textarea>
+                        <input type="url" name="link" placeholder="Link artikel (opsional)">
+                        <button type="submit" class="btn btn-primary">Simpan Artikel</button>
+                    </form>
+                    <div id="article-msg" style="margin-top: 12px; color: #475569;"></div>
+                    <div id="article-list"></div>
+                </section>
+                <section class="section-block">
+                    <div class="page-heading">
+                        <h2>Daftar Upload</h2>
+                        <p class="page-description">Daftar file dan tautan yang telah diunggah. Klik tautan untuk melihat file.</p>
+                    </div>
+                    <div id="upload-list"></div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        const statusEl = document.querySelector('.login-status');
+        const uploadForm = document.getElementById('upload-form');
+        const uploadMsg = document.getElementById('upload-msg');
+        const uploadList = document.getElementById('upload-list');
+        const galleryForm = document.getElementById('gallery-form');
+        const galleryMsg = document.getElementById('gallery-msg');
+        const clientForm = document.getElementById('client-form');
+        const clientMsg = document.getElementById('client-msg');
+        const clientList = document.getElementById('client-list');
+        const productForm = document.getElementById('product-form');
+        const productMsg = document.getElementById('product-msg');
+        const productList = document.getElementById('product-list');
+        const articleForm = document.getElementById('article-form');
+        const articleMsg = document.getElementById('article-msg');
+        const articleList = document.getElementById('article-list');
+        const logoutLink = document.getElementById('logout-link');
+
+        async function fetchStatus() {
+            try {
+                const res = await fetch(`${API_BASE}/api/me`);
+                if (!res.ok) throw new Error('Unauthorized');
+                const user = await res.json();
+                statusEl.textContent = `Masuk sebagai ${user.name || user.email}`;
+                return true;
+            } catch (err) {
+                statusEl.textContent = 'Tidak terautentikasi. Silakan login terlebih dahulu.';
+                return false;
+            }
+        }
+
+        async function loadUploads() {
+            const canView = await fetchStatus();
+            if (!canView) {
+                uploadList.innerHTML = '<p>Harap login dengan akun terlebih dahulu.</p>';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/uploads`);
+                if (!res.ok) throw new Error('Gagal memuat daftar upload');
+                const uploads = await res.json();
+                if (!uploads.length) {
+                    uploadList.innerHTML = '<p>Tidak ada upload tersimpan.</p>';
+                    return;
+                }
+                uploadList.innerHTML = uploads.map(item => `
+                    <article class="article-card">
+                        <h3>${item.title}</h3>
+                        <p>${item.link ? `<a href="${item.link}" target="_blank">${item.link}</a>` : 'Tidak ada tautan'}</p>
+                        <p>${item.filename ? `<a href="${API_BASE}/uploads/${item.filename}" target="_blank">Lihat file</a>` : 'Tidak ada file'}</p>
+                        <small>Diunggah: ${new Date(item.created_at).toLocaleString()}</small>
+                    </article>
+                `).join('');
+            } catch (err) {
+                uploadList.innerHTML = '<p>Terjadi kesalahan saat memuat data admin.</p>';
+                console.error(err);
+            }
+        }
+
+        async function loadGallery() {
+            const canView = await fetchStatus();
+            if (!canView) {
+                document.getElementById('gallery-msg').textContent = 'Login terlebih dahulu untuk melihat gallery.';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/gallery`);
+                if (!res.ok) throw new Error('Gagal memuat gallery');
+                const items = await res.json();
+                if (!items.length) {
+                    document.getElementById('gallery-msg').textContent = 'Belum ada foto gallery.';
+                    return;
+                }
+                document.getElementById('gallery-msg').textContent = '';
+                const existingList = document.getElementById('gallery-list');
+                if (existingList) existingList.remove();
+                // render gallery list with delete buttons
+                const listHtml = items.map(item => `
+                    <article class="article-card" style="display:flex; gap:12px; align-items:center;">
+                        <div style="flex:0 0 140px;"><img src="${API_BASE}/uploads/${item.filename}" alt="${item.title}" style="max-width:140px; border-radius:8px;"></div>
+                        <div style="flex:1;">
+                            <h3>${item.title}</h3>
+                            <small>Diunggah: ${new Date(item.created_at).toLocaleString()}</small>
+                        </div>
+                        <div style="flex:0 0 auto;">
+                            <button class="btn btn-danger" onclick="deleteGallery(${item.id})">Hapus</button>
+                        </div>
+                    </article>
+                `).join('');
+                const gallerySection = document.getElementById('gallery-msg');
+                // place list after message
+                gallerySection.insertAdjacentHTML('afterend', `<div id="gallery-list">${listHtml}</div>`);
+            } catch (err) {
+                document.getElementById('gallery-msg').textContent = 'Tidak dapat memuat gallery.';
+                console.error(err);
+            }
+        }
+
+        async function deleteGallery(id) {
+            if (!confirm('Yakin ingin menghapus foto ini?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/gallery/${id}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    alert(`Gagal menghapus: ${msg}`);
+                    return;
+                }
+                // refresh gallery
+                const existing = document.getElementById('gallery-list');
+                if (existing) existing.remove();
+                await loadGallery();
+            } catch (err) {
+                alert('Terjadi kesalahan saat menghapus foto.');
+                console.error(err);
+            }
+        }
+
+        async function loadClients() {
+            const canView = await fetchStatus();
+            if (!canView) {
+                clientList.innerHTML = '<p>Login terlebih dahulu untuk melihat klien.</p>';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/clients`);
+                if (!res.ok) throw new Error('Gagal memuat daftar klien');
+                const clients = await res.json();
+                if (!clients.length) {
+                    clientList.innerHTML = '<p>Tidak ada klien.</p>';
+                    return;
+                }
+                clientList.innerHTML = clients.map(client => `
+                    <article class="article-card">
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <input type="text" id="client-name-${client.id}" value="${client.name}" style="flex:1; padding:12px 14px; border:1px solid rgba(15, 23, 42, 0.12); border-radius:14px;">
+                            <button type="button" class="btn btn-secondary" onclick="updateClient(${client.id})">Simpan</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteClient(${client.id})">Hapus</button>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (err) {
+                clientList.innerHTML = '<p>Terjadi kesalahan saat memuat daftar klien.</p>';
+                console.error(err);
+            }
+        }
+
+        async function deleteClient(id) {
+            if (!confirm('Yakin ingin menghapus klien ini?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/clients/${id}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    alert(`Gagal menghapus: ${msg}`);
+                    return;
+                }
+                await loadClients();
+            } catch (err) {
+                alert('Terjadi kesalahan saat menghapus klien.');
+                console.error(err);
+            }
+        }
+
+        async function updateClient(id) {
+            const input = document.getElementById(`client-name-${id}`);
+            const name = input.value.trim();
+            if (!name) {
+                alert('Nama klien tidak boleh kosong.');
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/clients/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    alert(`Gagal menyimpan: ${msg}`);
+                    return;
+                }
+                await loadClients();
+            } catch (err) {
+                alert('Terjadi kesalahan saat menyimpan nama klien.');
+                console.error(err);
+            }
+        }
+
+        async function loadProducts() {
+            const canView = await fetchStatus();
+            if (!canView) {
+                productList.innerHTML = '<p>Login terlebih dahulu untuk melihat daftar produk.</p>';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/products`);
+                if (!res.ok) throw new Error('Gagal memuat produk');
+                const products = await res.json();
+                if (!products.length) {
+                    productList.innerHTML = '<p>Belum ada produk tersimpan.</p>';
+                    return;
+                }
+                productList.innerHTML = products.map(product => `
+                    <article class="article-card">
+                        <input id="product-title-${product.id}" type="text" value="${product.title}" placeholder="Judul produk" style="width:100%;padding:12px 14px;border:1px solid rgba(15,23,42,0.12);border-radius:14px;margin-bottom:10px;">
+                        <textarea id="product-description-${product.id}" style="width:100%;min-height:80px; padding:12px 14px;border:1px solid rgba(15,23,42,0.12);border-radius:14px;">${product.description}</textarea>
+                        <input type="text" id="product-link-${product.id}" value="${product.link || ''}" placeholder="Link produk" style="width:100%;padding:12px 14px;border:1px solid rgba(15,23,42,0.12);border-radius:14px;margin-top:10px;">
+                        <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+                            <button type="button" class="btn btn-secondary" onclick="updateProduct(${product.id})">Simpan</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteProduct(${product.id})">Hapus</button>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (err) {
+                productList.innerHTML = '<p>Terjadi kesalahan saat memuat produk.</p>';
+                console.error(err);
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!confirm('Yakin ingin menghapus produk ini?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/products/${id}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    alert(`Gagal menghapus: ${msg}`);
+                    return;
+                }
+                await loadProducts();
+            } catch (err) {
+                alert('Terjadi kesalahan saat menghapus produk.');
+                console.error(err);
+            }
+        }
+
+        async function updateProduct(id) {
+            const title = document.getElementById(`product-title-${id}`).value.trim();
+            const description = document.getElementById(`product-description-${id}`).value.trim();
+            const link = document.getElementById(`product-link-${id}`).value.trim();
+            if (!title || !description) {
+                alert('Judul dan deskripsi produk tidak boleh kosong.');
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/products/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, link })
+                });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    alert(`Gagal menyimpan: ${msg}`);
+                    return;
+                }
+                await loadProducts();
+            } catch (err) {
+                alert('Terjadi kesalahan saat menyimpan produk.');
+                console.error(err);
+            }
+        }
+
+        async function loadArticles() {
+            const canView = await fetchStatus();
+            if (!canView) {
+                articleList.innerHTML = '<p>Login terlebih dahulu untuk melihat daftar artikel.</p>';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/articles`);
+                if (!res.ok) throw new Error('Gagal memuat artikel');
+                const articles = await res.json();
+                if (!articles.length) {
+                    articleList.innerHTML = '<p>Belum ada artikel tersimpan.</p>';
+                    return;
+                }
+                articleList.innerHTML = articles.map(article => `
+                    <article class="article-card">
+                        <input id="article-title-${article.id}" type="text" value="${article.title}" placeholder="Judul artikel" style="width:100%;padding:12px 14px;border:1px solid rgba(15,23,42,0.12);border-radius:14px;margin-bottom:10px;">
+                        <textarea id="article-description-${article.id}" style="width:100%;min-height:80px; padding:12px 14px;border:1px solid rgba(15,23,42,0.12);border-radius:14px;">${article.description}</textarea>
+                        <input type="text" id="article-link-${article.id}" value="${article.link || ''}" placeholder="Link artikel" style="width:100%;padding:12px 14px;border:1px solid rgba(15,23,42,0.12);border-radius:14px;margin-top:10px;">
+                        <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+                            <button type="button" class="btn btn-secondary" onclick="updateArticle(${article.id})">Simpan</button>
+                            <button type="button" class="btn btn-danger" onclick="deleteArticle(${article.id})">Hapus</button>
+                        </div>
+                    </article>
+                `).join('');
+            } catch (err) {
+                articleList.innerHTML = '<p>Terjadi kesalahan saat memuat artikel.</p>';
+                console.error(err);
+            }
+        }
+
+        async function deleteArticle(id) {
+            if (!confirm('Yakin ingin menghapus artikel ini?')) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/articles/${id}`, { method: 'DELETE' });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    alert(`Gagal menghapus: ${msg}`);
+                    return;
+                }
+                await loadArticles();
+            } catch (err) {
+                alert('Terjadi kesalahan saat menghapus artikel.');
+                console.error(err);
+            }
+        }
+
+        async function updateArticle(id) {
+            const title = document.getElementById(`article-title-${id}`).value.trim();
+            const description = document.getElementById(`article-description-${id}`).value.trim();
+            const link = document.getElementById(`article-link-${id}`).value.trim();
+            if (!title || !description) {
+                alert('Judul dan ringkasan artikel tidak boleh kosong.');
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/articles/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, link })
+                });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    alert(`Gagal menyimpan: ${msg}`);
+                    return;
+                }
+                await loadArticles();
+            } catch (err) {
+                alert('Terjadi kesalahan saat menyimpan artikel.');
+                console.error(err);
+            }
+        }
+
+        productForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            productMsg.textContent = '';
+            const formData = new FormData(productForm);
+            const title = formData.get('title')?.trim();
+            const description = formData.get('description')?.trim();
+            const link = formData.get('link')?.trim();
+            if (!title || !description) {
+                productMsg.textContent = 'Judul dan deskripsi produk wajib diisi.';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/products`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, link })
+                });
+                if (!res.ok) {
+                    productMsg.textContent = await res.text();
+                    return;
+                }
+                productMsg.textContent = 'Produk berhasil disimpan.';
+                productForm.reset();
+                await loadProducts();
+            } catch (err) {
+                productMsg.textContent = 'Tidak dapat menyimpan produk. Pastikan server berjalan.';
+                console.error(err);
+            }
+        });
+
+        articleForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            articleMsg.textContent = '';
+            const formData = new FormData(articleForm);
+            const title = formData.get('title')?.trim();
+            const description = formData.get('description')?.trim();
+            const link = formData.get('link')?.trim();
+            if (!title || !description) {
+                articleMsg.textContent = 'Judul dan ringkasan artikel wajib diisi.';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/articles`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, description, link })
+                });
+                if (!res.ok) {
+                    articleMsg.textContent = await res.text();
+                    return;
+                }
+                articleMsg.textContent = 'Artikel berhasil disimpan.';
+                articleForm.reset();
+                await loadArticles();
+            } catch (err) {
+                articleMsg.textContent = 'Tidak dapat menyimpan artikel. Pastikan server berjalan.';
+                console.error(err);
+            }
+        });
+
+        uploadForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            uploadMsg.textContent = '';
+            const formData = new FormData(uploadForm);
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/uploads`, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!res.ok) {
+                    const msg = await res.text();
+                    uploadMsg.textContent = msg;
+                    return;
+                }
+                uploadMsg.textContent = 'Upload berhasil.';
+                uploadForm.reset();
+                loadUploads();
+            } catch (err) {
+                uploadMsg.textContent = 'Tidak dapat mengunggah. Pastikan server berjalan.';
+                console.error(err);
+            }
+        });
+
+        galleryForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            galleryMsg.textContent = '';
+            const formData = new FormData(galleryForm);
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/gallery`, {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!res.ok) {
+                    galleryMsg.textContent = await res.text();
+                    return;
+                }
+                galleryMsg.textContent = 'Foto gallery berhasil diunggah.';
+                galleryForm.reset();
+                await loadGallery();
+            } catch (err) {
+                galleryMsg.textContent = 'Tidak dapat mengunggah foto. Pastikan server berjalan.';
+                console.error(err);
+            }
+        });
+
+        clientForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            clientMsg.textContent = '';
+            const formData = new FormData(clientForm);
+            const name = formData.get('name')?.trim();
+            if (!name) {
+                clientMsg.textContent = 'Nama klien wajib diisi.';
+                return;
+            }
+            try {
+                const res = await fetch(`${API_BASE}/api/admin/clients`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+                if (!res.ok) {
+                    clientMsg.textContent = await res.text();
+                    return;
+                }
+                clientMsg.textContent = 'Klien berhasil ditambahkan.';
+                clientForm.reset();
+                loadClients();
+            } catch (err) {
+                clientMsg.textContent = 'Tidak dapat menambahkan klien. Pastikan server berjalan.';
+                console.error(err);
+            }
+        });
+
+        logoutLink.addEventListener('click', async (event) => {
+            event.preventDefault();
+            await fetch(`${API_BASE}/api/logout`, { method: 'POST' });
+            window.location.href = 'http://localhost:3000/signin.html';
+        });
+
+        loadUploads();
+        loadGallery();
+        loadClients();
+        loadProducts();
+        loadArticles();
+    </script>
+</body>
+</html>

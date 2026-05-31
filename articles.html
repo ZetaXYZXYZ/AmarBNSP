@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artikel - PT. Inspirasi Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Logo</span>
+                    <span class="brand-tag">Solusi digital modern</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">Artikel</p>
+                    <h1>Wawasan Digital untuk Bisnis Anda</h1>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <div class="nav-brand">Home</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Produk / Jasa</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="clients.html">Klien</a></li>
+                <li><a href="articles.html" class="active">Artikel</a></li>
+                <li><a href="events.html">Event</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+                <li><a href="cart.html">Keranjang</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-layout">
+            <main class="content-area">
+                <section class="page-heading">
+                    <p class="hero-subtitle">Artikel</p>
+                    <h2>Informasi dan Tips Digital</h2>
+                    <p class="page-description">Kumpulan artikel yang membahas tren digital, strategi pemasaran, dan cara memaksimalkan penggunaan teknologi dalam bisnis.</p>
+                </section>
+                <section class="section-block">
+                    <div id="articles-list"></div>
+                </section>
+            </main>
+            <footer class="footer">
+            </footer>
+        </div>
+    </div>
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        async function loadArticlesPage() {
+            const list = document.getElementById('articles-list');
+            try {
+                const res = await fetch(`${API_BASE}/api/articles`, { credentials: 'include' });
+                if (!res.ok) throw new Error('Gagal memuat artikel');
+                const articles = await res.json();
+                if (!articles.length) {
+                    list.innerHTML = '<div class="article-card">Belum ada artikel.</div>';
+                    return;
+                }
+                list.innerHTML = articles.map(article => `
+                    <div class="article-card">
+                        <h3>${article.title}</h3>
+                        <p>${article.description}</p>
+                        ${article.link ? `<a href="${article.link}" target="_blank">Baca selengkapnya</a>` : ''}
+                    </div>
+                `).join('');
+            } catch (err) {
+                list.innerHTML = '<div class="article-card">Tidak dapat memuat artikel. Pastikan login dan server berjalan.</div>';
+                console.error(err);
+            }
+        }
+        loadArticlesPage();
+    </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Klien - PT. Inspirasi Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <script>
+        if (window.location.hostname !== 'localhost' || window.location.port !== '3000') {
+            window.location.href = 'http://localhost:3000' + window.location.pathname;
+        }
+    </script>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Logo</span>
+                    <span class="brand-tag">Solusi digital modern</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">Daftar Klien</p>
+                    <h1>Kepercayaan Klien Kami</h1>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <div class="nav-brand">Home</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Produk / Jasa</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="clients.html" class="active">Klien</a></li>
+                <li><a href="articles.html">Artikel</a></li>
+                <li><a href="events.html">Event</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-layout">
+            <main class="content-area">
+                <section class="page-heading">
+                    <p class="hero-subtitle">Klien Kami</p>
+                    <h2>Perusahaan & Brand yang Kami Layani</h2>
+                    <p class="page-description">Rangkaian klien kami berasal dari berbagai industri seperti teknologi, ritel, pendidikan, dan layanan profesional.</p>
+                </section>
+                <section class="client-section">
+                    <div class="client-grid" id="client-grid"></div>
+                </section>
+            </main>
+            <footer class="footer">
+            </footer>
+        </div>
+    </div>
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        async function loadClientsPage() {
+            const grid = document.getElementById('client-grid');
+            try {
+                const res = await fetch(`${API_BASE}/api/clients`);
+                if (!res.ok) throw new Error('Gagal memuat klien');
+                const clients = await res.json();
+                if (!clients.length) {
+                    grid.innerHTML = '<div class="client-card">Belum ada data klien.</div>';
+                    return;
+                }
+                grid.innerHTML = clients.map(client => `
+                    <div class="client-card">
+                        <p>${client.name}</p>
+                    </div>
+                `).join('');
+            } catch (err) {
+                grid.innerHTML = '<div class="client-card">Tidak dapat memuat klien. Pastikan server berjalan dengan http://localhost:3000.</div>';
+                console.error(err);
+            }
+        }
+        loadClientsPage();
+    </script>
+</body>
+</html>

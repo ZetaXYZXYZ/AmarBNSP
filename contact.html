@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontak - PT. Inspirasi Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Logo</span>
+                    <span class="brand-tag">Solusi digital modern</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">Kontak</p>
+                    <h1>Hubungi PT. Inspirasi Digital</h1>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <div class="nav-brand">Home</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html">Produk / Jasa</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="clients.html">Klien</a></li>
+                <li><a href="articles.html">Artikel</a></li>
+                <li><a href="events.html">Event</a></li>
+                <li><a href="contact.html" class="active">Kontak</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-layout">
+            <main class="content-area">
+                <section class="page-heading">
+                    <p class="hero-subtitle">Hubungi Kami</p>
+                    <h2>Kontak dan Informasi Perusahaan</h2>
+                    <p class="page-description">Silakan hubungi kami untuk memulai kerja sama atau mendapatkan konsultasi digital sesuai kebutuhan bisnis Anda.</p>
+                </section>
+                <section class="contact-section">
+                    <div class="contact-grid">
+                        <div>
+                            <p><strong>Alamat:</strong> Jl. Teknologi No. 8, Jakarta</p>
+                            <p><strong>Telepon:</strong> +62 21 1234 5678</p>
+                            <p><strong>Email:</strong> info@inspirasidigital.co.id</p>
+                        </div>
+                        <div>
+                            <p><strong>Fax:</strong> +62 21 8765 4321</p>
+                            <p><strong>Jam Operasional:</strong> Senin - Jumat, 09.00 - 18.00</p>
+                        </div>
+                    </div>
+                </section>
+                <section class="section-block">
+                    <h2>Form Masuk / Keluar</h2>
+                    <p>Simulasi login sederhana untuk menunjukkan proses sign in / sign out di halaman statis ini.</p>
+                    <div class="login-card">
+                        <p class="login-title">Masuk / Keluar</p>
+                        <p class="login-status">Silakan masuk untuk menggunakan akun.</p>
+                        <form class="login-form">
+                            <input type="text" name="username" placeholder="Username" required>
+                            <input type="password" name="password" placeholder="Password" required>
+                            <button type="submit">Sign in</button>
+                            <button type="button" class="logout-btn">Sign out</button>
+                        </form>
+                    </div>
+                </section>
+            </main>
+            <footer class="footer">
+            </footer>
+        </div>
+    </div>
+    <script>
+        const loginForm = document.querySelector('.login-form');
+        const loginStatus = document.querySelector('.login-status');
+        const logoutBtn = document.querySelector('.logout-btn');
+
+        function updateStatus() {
+            const user = localStorage.getItem('companyUser');
+            if (user) {
+                loginStatus.textContent = `Terhubung sebagai ${user}.`;
+            } else {
+                loginStatus.textContent = 'Silakan masuk untuk menggunakan akun.';
+            }
+        }
+
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const username = loginForm.username.value.trim();
+            if (username) {
+                localStorage.setItem('companyUser', username);
+                updateStatus();
+                loginForm.reset();
+            }
+        });
+
+        logoutBtn.addEventListener('click', function () {
+            localStorage.removeItem('companyUser');
+            updateStatus();
+        });
+
+        updateStatus();
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produk & Jasa - PT. Inspirasi Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo-area">
+                <div class="logo-placeholder">
+                    <img src="img.png" alt="PT Cipta Digital Nusantara" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="brand-name">Logo</span>
+                    <span class="brand-tag">Solusi digital modern</span>
+                </div>
+            </div>
+            <div class="company-name">
+                <div>
+                    <p class="eyebrow">Produk & Jasa</p>
+                    <h1>Solusi Digital yang Kami Tawarkan</h1>
+                </div>
+            </div>
+        </header>
+
+        <nav class="navbar">
+            <div class="nav-brand">Home</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Beranda</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="products.html" class="active">Produk / Jasa</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li><a href="clients.html">Klien</a></li>
+                <li><a href="articles.html">Artikel</a></li>
+                <li><a href="events.html">Event</a></li>
+                <li><a href="contact.html">Kontak</a></li>
+                    <li><a href="cart.html">Keranjang</a></li>
+            </ul>
+        </nav>
+
+        <div class="main-layout">
+            <main class="content-area">
+                <section class="page-heading">
+                    <p class="hero-subtitle">Produk & Layanan</p>
+                    <h2>Pilihan Layanan Digital untuk Bisnis Anda</h2>
+                    <p class="page-description">Kami menyediakan produk dan jasa yang dirancang untuk meningkatkan efisiensi, menjangkau pelanggan, dan memperkuat brand Anda secara online.</p>
+                </section>
+                <section class="feature-grid" id="products-list"></section>
+                <section class="section-block">
+                    <h2>Detail Layanan</h2>
+                    <ul class="article-list">
+                        <li>Website Company Profile dan e-commerce</li>
+                        <li>Platform manajemen pelanggan dan sistem reservasi</li>
+                        <li>Digital marketing, SEO, dan kampanye iklan online</li>
+                    </ul>
+                </section>
+            </main>
+            <footer class="footer">
+            </footer>
+        </div>
+    </div>
+    <script>
+        const API_BASE = 'http://localhost:3000';
+        async function loadProductsPage() {
+            const list = document.getElementById('products-list');
+            try {
+                const res = await fetch(`${API_BASE}/api/products`, { credentials: 'include' });
+                if (!res.ok) throw new Error('Gagal memuat produk');
+                const products = await res.json();
+                if (!products.length) {
+                    list.innerHTML = '<div class="feature-card">Belum ada produk.</div>';
+                    return;
+                }
+                list.innerHTML = products.map(product => `
+                    <article class="feature-card">
+                        <h3>${product.title}</h3>
+                        <p>${product.description}</p>
+                        ${product.link ? `<a href="${product.link}" target="_blank">Lihat detail</a>` : ''}
+                        <div style="margin-top:10px;"><button class="btn btn-primary" onclick="addToCart(${product.id})">Tambah ke Keranjang</button></div>
+                    </article>
+                `).join('');
+            } catch (err) {
+                list.innerHTML = '<div class="feature-card">Tidak dapat memuat produk. Pastikan login dan server berjalan.</div>';
+                console.error(err);
+            }
+        }
+
+        (async function () {
+            const restricted = ['/gallery.html', '/clients.html', '/articles.html', '/events.html', '/contact.html', '/admin.html', '/cart.html'];
+            const nav = document.querySelector('.nav-links');
+            if (!nav) return;
+            try {
+                const res = await fetch('/api/me');
+                if (!res.ok) throw new Error('not logged in');
+            } catch (err) {
+                nav.querySelectorAll('li a').forEach(link => {
+                    const href = link.getAttribute('href') || '';
+                    let path = href.startsWith('http') ? new URL(href).pathname.toLowerCase() : href.toLowerCase();
+                    if (!path.startsWith('/')) path = '/' + path;
+                    if (restricted.includes(path)) {
+                        const li = link.closest('li');
+                        if (li) li.style.display = 'none';
+                    }
+                });
+            }
+        })();
+        async function addToCart(productId) {
+            try {
+                const res = await fetch(`${API_BASE}/api/cart`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ product_id: productId, quantity: 1 }),
+                    credentials: 'include'
+                });
+                if (!res.ok) {
+                    if (res.status === 401) { window.location.href = '/signin.html'; return; }
+                    const txt = await res.text();
+                    alert(txt);
+                    return;
+                }
+                alert('Produk ditambahkan ke keranjang');
+            } catch (err) { alert('Gagal menambahkan ke keranjang'); console.error(err); }
+        }
+
+        loadProductsPage();
+    </script>
+</body>
+</html>
